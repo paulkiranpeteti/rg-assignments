@@ -1,24 +1,24 @@
 // task1: Complete the below statement to initialize the variable 'transactions' as an empty array.
-let transactions = '';
+let transactions = [];
 
 let isEditing = false;
 let editingTransactionId = null;
 
 
-document.getElementById('transactionForm').addEventListener('submit', function (event) {
+document.getElementById('transactionForm').addEventListener('submit', async function (event) {
     event.preventDefault(); // Prevent default form submission
 
 
     // task2: Retrieve 'payee', 'amount', and 'reason' values from form inputs using document.getElementById().
 
     // Replace '' with code to access 'payee' input value from HTML document
-    const payee = '';
+    const payee = document.getElementById('payee').value.trim();
 
     // Replace '' with code to access 'amount' input value from HTML document and convert it to float
-    const amount = '';
+    const amount = parseFloat(document.getElementById('amount').value.trim());
 
     // Replace '' with code to access 'reason' input value from HTML document
-    const reason = '';
+    const reason = document.getElementById('reason').value.trim();
 
 
     if (payee === '' || amount <= 0 || isNaN(amount)) {
@@ -31,14 +31,14 @@ document.getElementById('transactionForm').addEventListener('submit', function (
         isEditing = false;
         editingTransactionId = null;
         document.querySelector('button[type="submit"]').textContent = 'Add Transaction';
-        updateTotalTransactionAmount();
+        await updateTotalTransactionAmount();
     } else {
         addTransaction(payee, amount, reason);
     }
 
     clearForm();
     updateTransactionTable();
-    updateTotalTransactionAmount();
+    await updateTotalTransactionAmount();
 });
 
 
@@ -49,20 +49,20 @@ function addTransaction(payee, amount, reason) {
     // task3: Complete the 'newTransaction' object by replacing the placeholder values with appropriate data.
     const newTransaction = {
         id: id,
-        payee: '',
-        amount: '',
-        reason: ''
+        payee: payee,
+        amount: amount,
+        reason: reason
     };
 
 
     // task4: Complete the below statement to add the 'newTransaction' object into the 'transactions' array using the 'push' method.
-    transactions.push();
+    transactions.push(newTransaction);
 
 }
 
 function updateTransaction(id, payee, amount, reason) {
     // task5: Complete the below statement to find the transaction object in the 'transactions' array that matches the provided 'id' parameter.
-    const transaction = '';
+    const transaction = transactions.find(t => t.id === id);
 
 
     if (transaction) {
@@ -85,7 +85,7 @@ function editTransaction(id) {
     }
 }
 
-function deleteTransaction(id) {
+async function deleteTransaction(id) {
 
     const index = transactions.findIndex(t => t.id === id);
 
@@ -94,7 +94,7 @@ function deleteTransaction(id) {
         transactions.splice();
 
         updateTransactionTable();
-        updateTotalTransactionAmount();
+        await updateTotalTransactionAmount();
     }
 }
 // task7: Convert below function 'updateTotalTransactionAmount' to use async/await.
@@ -102,7 +102,7 @@ function deleteTransaction(id) {
  a. Convert the 'updateTotalTransactionAmount' function to an async function.
  b. Update all occurrences of 'updateTotalTransactionAmount' across the script to use await and ensure their calling functions are marked as async.
 */
-function updateTotalTransactionAmount() {
+async function updateTotalTransactionAmount() {
     let totalAmount = 0;
     transactions.forEach(transaction => {
         totalAmount += transaction.amount;
